@@ -1,14 +1,12 @@
-package com.messyo.livraria.entity;
+package com.messyo.livraria.editora.entity;
 
+import com.messyo.livraria.entity.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(
@@ -18,7 +16,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Editora {
+public class Editora extends Auditable {
     @Id
     @SequenceGenerator(name = "editora_sequence", sequenceName = "editora_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "editora_sequence")
@@ -30,11 +28,4 @@ public class Editora {
     @Column(name = "cidade", nullable = false, columnDefinition = "TEXT")
     private String cidade;
 
-    @Column(name = "created_at", updatable = false)
-    @CreatedDate
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private Date updatedAt;
 }
