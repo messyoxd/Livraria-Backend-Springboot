@@ -32,6 +32,11 @@ public class EditoraService {
         return "Editora criada com id " + savedEditora.getEditoraId();
     }
 
+//    public Editora verifyAndGetIfExists(Long id) {
+//        return _editoraRepository.findById(id)
+//                .orElseThrow(() -> new EditoraNotFoundException(id));
+//    }
+
 //    public EditoraDTO findById(Long id) throws EntityNotFoundException {
 //        Editora e = _editoraRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
 //
