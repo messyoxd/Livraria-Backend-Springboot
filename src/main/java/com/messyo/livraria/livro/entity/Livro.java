@@ -25,7 +25,7 @@ public class Livro extends Auditable {
 
     @ManyToOne(
             optional = false,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     @JoinColumn(
             name = "editora_id",
