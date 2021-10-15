@@ -10,10 +10,10 @@ import javax.persistence.*;
 
 
 @Entity
+@Table(
+        name = "usuarios"
+)
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Usuario extends Auditable {
     @Id
     @SequenceGenerator(name = "usuario_sequence", sequenceName = "usuario_sequence", allocationSize = 1)

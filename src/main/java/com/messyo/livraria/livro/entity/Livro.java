@@ -17,9 +17,6 @@ import java.time.LocalDateTime;
         name = "livros"
 )
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Livro extends Auditable {
     @Id
     @SequenceGenerator(name = "livro_sequence", sequenceName = "livro_sequence", allocationSize = 1)
