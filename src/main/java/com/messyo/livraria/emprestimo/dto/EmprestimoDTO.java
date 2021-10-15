@@ -31,6 +31,6 @@ public class EmprestimoDTO {
     private LocalDateTime dataDevolucao;
 
     @NotBlank(message = "O campo Status do Empréstimo é obrigatório")
-    @Size(max = 20)
+    @Size(max = 30)
     private String statusEmprestimo;
 }
