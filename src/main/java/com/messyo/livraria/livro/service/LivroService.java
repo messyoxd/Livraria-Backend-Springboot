@@ -1,5 +1,6 @@
 package com.messyo.livraria.livro.service;
 
+import com.messyo.livraria.emprestimo.exception.EmprestimoLivroNotAvailableException;
 import com.messyo.livraria.livro.dto.LivroDTO;
 import com.messyo.livraria.livro.entity.Livro;
 import com.messyo.livraria.livro.exception.LivroAlreadyExistsException;
@@ -38,6 +39,16 @@ public class LivroService {
                 });
     }
 
+    public void verifyIfLivroIsAvailable(Long id) {
+        _livroRepository.findById(id)
+                .ifPresent(livro -> {
+                    if(livro.getQuantidadeDisponivel() == 0){
+                        throw new EmprestimoLivroNotAvailableException(livro.getLivroId());
+                    }
+                });
+
+    }
+
     public LivroDTO findById(Long id) throws LivroNotFoundException {
         Livro l = _livroRepository.findById(id).orElseThrow(() -> new LivroNotFoundException(id));
 
@@ -54,6 +65,7 @@ public class LivroService {
         l.setEditora(livroDTO.getEditora() == null ? l.getEditora() : livroDTO.getEditora());
         l.setLancamento(livroDTO.getLancamento() == null ? l.getLancamento() : livroDTO.getLancamento());
         l.setNomeLivro(StringUtils.isEmpty(livroDTO.getNomeLivro()) ? l.getNomeLivro() : livroDTO.getNomeLivro());
+        l.setQuantidadeDisponivel(livroDTO.getQuantidadeDisponivel() == null ? l.getQuantidadeDisponivel() : livroDTO.getQuantidadeDisponivel());
         Livro livroToUpdate = _livroMapper.toModel(l);
         _livroRepository.save(livroToUpdate);
         return l;
@@ -64,6 +76,21 @@ public class LivroService {
         Livro livroToRemove = _livroMapper.toModel(l);
         _livroRepository.delete(livroToRemove);
         return l.getLivroId();
+    }
+
+    private void setLivroQuantidadeById(Long livroId, Integer quantidade){
+        LivroDTO l = this.findById(livroId);
+        this.verifyIfLivroIsAvailable(livroId);
+        l.setQuantidadeDisponivel(quantidade);
+        _livroRepository.save(_livroMapper.toModel(l));
+    }
+
+    public void decrementarQuantidade(Long livroId, Integer quantidade) {
+        this.setLivroQuantidadeById(livroId, quantidade - 1);
+    }
+
+    public void incrementarQuantidade(Long livroId, Integer quantidade) {
+        this.setLivroQuantidadeById(livroId, quantidade + 1);
     }
 
 //    public List<LivroDTO> findLivroByParameter(String parameter, String value) throws LivroNotFoundException {
