@@ -7,8 +7,6 @@ import com.messyo.livraria.editora.repository.EditoraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-
 @Service
 public class EditoraService {
     private EditoraRepository _editoraRepository;
@@ -16,7 +14,7 @@ public class EditoraService {
     private final EditoraMapper _editoraMapper = EditoraMapper.INSTANCE;
 
     @Autowired
-    public EditoraService(EditoraRepository editoraRepository){
+    public EditoraService(EditoraRepository editoraRepository) {
         _editoraRepository = editoraRepository;
     }
 
@@ -25,7 +23,7 @@ public class EditoraService {
         Editora savedEditora = null;
         try {
             savedEditora = _editoraRepository.save(editoraToSave);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("*************************************");
             System.out.println(e);
             System.out.println("*************************************");
