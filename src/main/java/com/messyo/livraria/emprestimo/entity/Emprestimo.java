@@ -16,9 +16,6 @@ import java.time.LocalDateTime;
         name = "emprestimos"
 )
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Emprestimo extends Auditable {
     @Id
     @SequenceGenerator(name = "emprestimo_sequence", sequenceName = "emprestimo_sequence", allocationSize = 1)

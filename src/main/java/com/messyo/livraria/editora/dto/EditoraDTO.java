@@ -21,5 +21,6 @@ public class EditoraDTO {
     private String nome;
 
     @NotBlank(message = "O campo Cidade é obrigatório")
+    @Size(max = 255)
     private String cidade;
 }

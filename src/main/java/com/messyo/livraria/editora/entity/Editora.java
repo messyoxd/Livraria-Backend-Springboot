@@ -13,9 +13,6 @@ import javax.persistence.*;
         name = "editoras"
 )
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Editora extends Auditable {
     @Id
     @SequenceGenerator(name = "editora_sequence", sequenceName = "editora_sequence", allocationSize = 1)
