@@ -31,11 +31,6 @@ public class EditoraService {
         return _editoraMapper.toDTO(savedEditora);
     }
 
-    private Editora verifyAndGetIfExists(Long id) {
-        return _editoraRepository.findById(id)
-                .orElseThrow(() -> new EditoraNotFoundException(id));
-    }
-
     private void verifyIfExists(Long id) {
         _editoraRepository.findById(id)
                 .ifPresent(editora -> {
