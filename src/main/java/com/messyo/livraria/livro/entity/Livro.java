@@ -5,6 +5,7 @@ import com.messyo.livraria.entity.Auditable;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -35,7 +36,7 @@ public class Livro extends Auditable {
     private String nomeLivro;
 
     @Column(name = "lancamento", nullable = false)
-    private Date lancamento;
+    private LocalDate lancamento;
 
     @Column(name = "quantidade_disponivel", nullable = false)
     private Integer quantidadeDisponivel;
