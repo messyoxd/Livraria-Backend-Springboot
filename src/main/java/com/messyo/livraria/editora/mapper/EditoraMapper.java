@@ -5,7 +5,7 @@ import com.messyo.livraria.editora.entity.Editora;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EditoraMapper {
     EditoraMapper INSTANCE = Mappers.getMapper(EditoraMapper.class);
 
