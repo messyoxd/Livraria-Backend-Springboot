@@ -6,12 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Builder
@@ -33,7 +33,7 @@ public class LivroDTO {
     private String nomeLivro;
 
     @NotNull(message = "O campo Lançamento é obrigatório")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/YYYY")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate lancamento;
 
     @NotNull(message = "O campo Quantidade Disponível é obrigatório")

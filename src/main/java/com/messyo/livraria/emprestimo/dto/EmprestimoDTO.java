@@ -29,10 +29,10 @@ public class EmprestimoDTO {
     private LivroDTO livroEmprestimo;
 
     @NotNull(message = "O campo Previsão de Devolução é obrigatório")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/YYYY")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate previsaoDevolucao;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/YYYY")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataDevolucao;
 
     @NotBlank(message = "O campo Status do Empréstimo é obrigatório")

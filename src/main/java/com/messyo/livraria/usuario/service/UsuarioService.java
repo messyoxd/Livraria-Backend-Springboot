@@ -1,7 +1,7 @@
 package com.messyo.livraria.usuario.service;
 
-import com.messyo.livraria.livro.exception.UsuarioAlreadyExistsException;
 import com.messyo.livraria.livro.exception.UsuarioNotFoundException;
+import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import com.messyo.livraria.usuario.entity.Usuario;
 import com.messyo.livraria.usuario.interfaces.IUsuarioService;
@@ -28,11 +28,13 @@ public class UsuarioService implements IUsuarioService {
 
 
     @Override
-    public UsuarioDTO create(UsuarioDTO usuarioDTO) {
+    public MessageDTO create(UsuarioDTO usuarioDTO) {
 //        verifyIfExistsByEmail(usuarioDTO.getEmail());
         Usuario usuarioToSave = _usuarioMapper.toModel(usuarioDTO);
         Usuario savedUsuario = _usuarioRepository.save(usuarioToSave);
-        return _usuarioMapper.toDTO(savedUsuario);
+        return MessageDTO.builder()
+                .message(String.format("User %s with ID %d was successfully created", savedUsuario.getNomeCompleto(), savedUsuario.getUsuarioId()))
+                .build();
     }
 
 //    private void verifyIfExists(Long id) {

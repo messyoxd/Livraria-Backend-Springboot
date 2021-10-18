@@ -1,5 +1,6 @@
 package com.messyo.livraria.usuario.controller;
 
+import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import com.messyo.livraria.usuario.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UsuarioController implements UsuarioControllerDocs {
     //    @ApiOperation(value="Criar Usuario", authorizations = {@Authorization(value = "jwtToken")})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioDTO create(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+    public MessageDTO create(@RequestBody @Valid UsuarioDTO usuarioDTO) {
         return _usuarioService.create(usuarioDTO);
     }
 
