@@ -7,6 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface UsuarioMapper {
+//    fazer singleton @MapperAlgumacoisa
     UsuarioMapper INSTANCE = Mappers.getMapper(UsuarioMapper.class);
 
     Usuario toModel(UsuarioDTO usuarioDTO);

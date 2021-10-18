@@ -4,6 +4,7 @@ import com.messyo.livraria.editora.dto.EditoraDTO;
 import com.messyo.livraria.editora.entity.Editora;
 import com.messyo.livraria.editora.exception.EditoraAlreadyExistsException;
 import com.messyo.livraria.editora.exception.EditoraNotFoundException;
+import com.messyo.livraria.editora.interfaces.IEditoraService;
 import com.messyo.livraria.editora.mapper.EditoraMapper;
 import com.messyo.livraria.editora.repository.EditoraRepository;
 import io.micrometer.core.instrument.util.StringUtils;
@@ -14,48 +15,55 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class EditoraService {
+public class EditoraService implements IEditoraService {
     private EditoraRepository _editoraRepository;
 
-    private final EditoraMapper _editoraMapper = EditoraMapper.INSTANCE;
+    @Autowired
+    protected EditoraMapper _editoraMapper;
 
     @Autowired
     public EditoraService(EditoraRepository editoraRepository) {
         _editoraRepository = editoraRepository;
     }
 
+    @Override
     public EditoraDTO create(EditoraDTO editoraDTO) {
-        verifyIfExists(editoraDTO.getEditoraId());
+        verifyIfExistsByName(editoraDTO.getNome());
         Editora editoraToSave = _editoraMapper.toModel(editoraDTO);
         Editora savedEditora = _editoraRepository.save(editoraToSave);
         return _editoraMapper.toDTO(savedEditora);
     }
 
-    private void verifyIfExists(Long id) {
-        _editoraRepository.findById(id)
+    @Override
+    public void verifyIfExistsByName(String nome) {
+        _editoraRepository.findByNome(nome)
                 .ifPresent(editora -> {
-                    throw new EditoraAlreadyExistsException((editora.getEditoraId()));
+                    throw new EditoraAlreadyExistsException((editora.getNome()));
                 });
     }
 
-    public EditoraDTO findById(Long id) throws EditoraNotFoundException {
+    @Override
+    public EditoraDTO findById(Long id) {
         Editora e = _editoraRepository.findById(id).orElseThrow(() -> new EditoraNotFoundException(id));
 
         return _editoraMapper.toDTO(e);
     }
 
+    @Override
     public List<EditoraDTO> getAll() {
         return _editoraRepository.findAll().stream().map(_editoraMapper::toDTO).collect(Collectors.toList());
     }
 
-    public Long removeById(Long id) throws EditoraNotFoundException {
+    @Override
+    public Long removeById(Long id) {
         EditoraDTO e = this.findById(id);
         Editora editoraToRemove = _editoraMapper.toModel(e);
         _editoraRepository.delete(editoraToRemove);
         return e.getEditoraId();
     }
 
-    public EditoraDTO updateEditora(EditoraDTO editoraDTO) throws EditoraNotFoundException {
+    @Override
+    public EditoraDTO updateEditora(EditoraDTO editoraDTO) {
         EditoraDTO e = this.findById(editoraDTO.getEditoraId());
         e.setCidade(StringUtils.isEmpty(editoraDTO.getCidade()) ? e.getCidade() : editoraDTO.getCidade());
         e.setNome(StringUtils.isEmpty(editoraDTO.getNome()) ? e.getNome() : editoraDTO.getNome());
@@ -63,4 +71,5 @@ public class EditoraService {
         _editoraRepository.save(editoraToUpdate);
         return e;
     }
+
 }

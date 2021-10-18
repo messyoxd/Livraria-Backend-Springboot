@@ -1,7 +1,7 @@
 package com.messyo.livraria.editora.controller;
 
 import com.messyo.livraria.editora.dto.EditoraDTO;
-import com.messyo.livraria.editora.service.EditoraService;
+import com.messyo.livraria.editora.interfaces.IEditoraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +13,8 @@ import java.util.List;
 @RequestMapping("/api/v1/editoras")
 public class EditoraController implements EditoraControllerDocs {
 
-    private EditoraService _editoraService;
-
     @Autowired
-    public EditoraController(EditoraService editoraService) {
-        _editoraService = editoraService;
-    }
+    private IEditoraService _editoraService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
