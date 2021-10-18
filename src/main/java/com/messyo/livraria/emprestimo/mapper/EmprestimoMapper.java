@@ -5,7 +5,7 @@ import com.messyo.livraria.emprestimo.entity.Emprestimo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EmprestimoMapper {
     EmprestimoMapper INSTANCE = Mappers.getMapper(EmprestimoMapper.class);
 

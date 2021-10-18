@@ -2,7 +2,7 @@ package com.messyo.livraria.livro.controller;
 
 import com.messyo.livraria.livro.dto.LivroDTO;
 import com.messyo.livraria.livro.exception.LivroNotFoundException;
-import com.messyo.livraria.livro.service.LivroService;
+import com.messyo.livraria.livro.interfaces.ILivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/livros")
 public class LivroController implements LivroControllerDocs {
-    private LivroService _livroService;
 
     @Autowired
-    public LivroController(LivroService livroService) {
-        _livroService = livroService;
-    }
+    private ILivroService _livroService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

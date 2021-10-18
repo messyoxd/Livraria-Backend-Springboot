@@ -1,7 +1,7 @@
 package com.messyo.livraria.usuario.controller;
 
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
-import com.messyo.livraria.usuario.service.UsuarioService;
+import com.messyo.livraria.usuario.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +12,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/usuarios")
 public class UsuarioController implements UsuarioControllerDocs {
-    private UsuarioService _usuarioService;
 
     @Autowired
-    public UsuarioController(UsuarioService usuarioService) {
-        _usuarioService = usuarioService;
-    }
-
+    private IUsuarioService _usuarioService;
 
     //    @ApiOperation(value="Criar Usuario", authorizations = {@Authorization(value = "jwtToken")})
     @PostMapping

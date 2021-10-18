@@ -1,6 +1,7 @@
 package com.messyo.livraria.emprestimo.controller;
 
 import com.messyo.livraria.emprestimo.dto.EmprestimoDTO;
+import com.messyo.livraria.emprestimo.interfaces.IEmprestimoService;
 import com.messyo.livraria.emprestimo.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,13 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/emprestimos")
 public class EmprestimoController implements EmprestimoControllerDocs {
-    private EmprestimoService _emprestimoService;
-
     @Autowired
-    public EmprestimoController(EmprestimoService emprestimoService) {
-        _emprestimoService = emprestimoService;
-    }
-
+    private IEmprestimoService _emprestimoService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping

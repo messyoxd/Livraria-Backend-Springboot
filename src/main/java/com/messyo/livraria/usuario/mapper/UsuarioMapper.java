@@ -5,7 +5,7 @@ import com.messyo.livraria.usuario.entity.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UsuarioMapper {
 //    fazer singleton @MapperAlgumacoisa
     UsuarioMapper INSTANCE = Mappers.getMapper(UsuarioMapper.class);
