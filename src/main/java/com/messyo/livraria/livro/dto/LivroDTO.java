@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -31,7 +31,7 @@ public class LivroDTO {
     private String nomeLivro;
 
     @NotNull(message = "O campo Lançamento é obrigatório")
-    private LocalDateTime lancamento;
+    private Date lancamento;
 
     @NotNull(message = "O campo Quantidade Disponível é obrigatório")
     private Integer quantidadeDisponivel;

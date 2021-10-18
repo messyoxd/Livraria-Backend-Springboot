@@ -8,6 +8,7 @@ import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Builder
 public class EmprestimoDTOBuilder {
@@ -17,9 +18,9 @@ public class EmprestimoDTOBuilder {
 
     private final LivroDTO livroEmprestimo = LivroDTOBuilder.builder().build().buildLivroDTO();
 
-    private final LocalDateTime previsaoDevolucao = LocalDateTime.now();
+    private final Date previsaoDevolucao = new Date();
 
-    private final LocalDateTime dataDevolucao = LocalDateTime.now().plusDays(2);
+    private final Date dataDevolucao = new Date(new Date().getTime() + (2 * 1000 * 60 * 60 * 24)); // 2 days
 
     private final String statusEmprestimo = "Emprestado";
 

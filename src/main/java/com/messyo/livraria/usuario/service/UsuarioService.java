@@ -4,6 +4,7 @@ import com.messyo.livraria.livro.exception.UsuarioAlreadyExistsException;
 import com.messyo.livraria.livro.exception.UsuarioNotFoundException;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import com.messyo.livraria.usuario.entity.Usuario;
+import com.messyo.livraria.usuario.interfaces.IUsuarioService;
 import com.messyo.livraria.usuario.mapper.UsuarioMapper;
 import com.messyo.livraria.usuario.repository.UsuarioRepository;
 import io.micrometer.core.instrument.util.StringUtils;
@@ -14,10 +15,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements IUsuarioService {
     private final UsuarioRepository _usuarioRepository;
 
-    private final UsuarioMapper _usuarioMapper = UsuarioMapper.INSTANCE;
+    @Autowired
+    protected UsuarioMapper _usuarioMapper;
 
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
@@ -25,20 +27,22 @@ public class UsuarioService {
     }
 
 
+    @Override
     public UsuarioDTO create(UsuarioDTO usuarioDTO) {
-        verifyIfExists(usuarioDTO.getUsuarioId());
+//        verifyIfExistsByEmail(usuarioDTO.getEmail());
         Usuario usuarioToSave = _usuarioMapper.toModel(usuarioDTO);
         Usuario savedUsuario = _usuarioRepository.save(usuarioToSave);
         return _usuarioMapper.toDTO(savedUsuario);
     }
 
-    private void verifyIfExists(Long id) {
-        _usuarioRepository.findById(id)
-                .ifPresent(usuario -> {
-                    throw new UsuarioAlreadyExistsException((usuario.getUsuarioId()));
-                });
-    }
+//    private void verifyIfExists(Long id) {
+//        _usuarioRepository.findById(id)
+//                .ifPresent(usuario -> {
+//                    throw new UsuarioAlreadyExistsException((usuario.getUsuarioId()));
+//                });
+//    }
 
+    @Override
     public UsuarioDTO findById(Long id) throws UsuarioNotFoundException {
         Usuario u = _usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNotFoundException(id));
 
@@ -55,10 +59,12 @@ public class UsuarioService {
 //        return uVM;
 //    }
 
+    @Override
     public List<UsuarioDTO> getAllUsuarios() {
         return _usuarioRepository.findAll().stream().map(_usuarioMapper::toDTO).collect(Collectors.toList());
     }
 
+    @Override
     public UsuarioDTO updateUsuario(UsuarioDTO usuarioDTO) throws UsuarioNotFoundException {
         UsuarioDTO u = this.findById(usuarioDTO.getUsuarioId());
         u.setNomeCompleto(StringUtils.isEmpty(usuarioDTO.getNomeCompleto()) ? u.getNomeCompleto() : usuarioDTO.getNomeCompleto());
@@ -71,6 +77,7 @@ public class UsuarioService {
         return u;
     }
 
+    @Override
     public Long removeById(Long id) throws UsuarioNotFoundException {
         UsuarioDTO u = this.findById(id);
         Usuario usuarioToRemove = _usuarioMapper.toModel(u);

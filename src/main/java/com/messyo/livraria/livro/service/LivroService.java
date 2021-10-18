@@ -5,6 +5,7 @@ import com.messyo.livraria.livro.dto.LivroDTO;
 import com.messyo.livraria.livro.entity.Livro;
 import com.messyo.livraria.livro.exception.LivroAlreadyExistsException;
 import com.messyo.livraria.livro.exception.LivroNotFoundException;
+import com.messyo.livraria.livro.interfaces.ILivroService;
 import com.messyo.livraria.livro.mapper.LivroMapper;
 import com.messyo.livraria.livro.repository.LivroRepository;
 import io.micrometer.core.instrument.util.StringUtils;
@@ -12,53 +13,61 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class LivroService {
+public class LivroService implements ILivroService {
     private LivroRepository _livroRepository;
 
-    private final LivroMapper _livroMapper = LivroMapper.INSTANCE;
+    @Autowired
+    protected LivroMapper _livroMapper;
 
     @Autowired
     public LivroService(LivroRepository livroRepository) {
         _livroRepository = livroRepository;
     }
 
+    @Override
     public LivroDTO create(LivroDTO livroDTO) {
-        verifyIfExists(livroDTO.getLivroId());
+        verifyIfExistsByName(livroDTO.getNomeLivro());
         Livro livroToSave = _livroMapper.toModel(livroDTO);
         Livro savedLivro = _livroRepository.save(livroToSave);
         return _livroMapper.toDTO(savedLivro);
     }
 
-    private void verifyIfExists(Long id) {
-        _livroRepository.findById(id)
+    @Override
+    public void verifyIfExistsByName(String nome) {
+        _livroRepository.findByNomeLivro(nome)
                 .ifPresent(livro -> {
-                    throw new LivroAlreadyExistsException((livro.getLivroId()));
+                    throw new LivroAlreadyExistsException((livro.getNomeLivro()));
                 });
     }
 
-    public void verifyIfLivroIsAvailable(Long id) {
-        _livroRepository.findById(id)
-                .ifPresent(livro -> {
+    @Override
+    public Integer verifyIfLivroIsAvailable(Long id) {
+        Optional<Livro> l = _livroRepository.findById(id);
+        l.ifPresent(livro -> {
                     if(livro.getQuantidadeDisponivel() == 0){
                         throw new EmprestimoLivroNotAvailableException(livro.getLivroId());
                     }
                 });
-
+        return l.get().getQuantidadeDisponivel();
     }
 
+    @Override
     public LivroDTO findById(Long id) throws LivroNotFoundException {
         Livro l = _livroRepository.findById(id).orElseThrow(() -> new LivroNotFoundException(id));
 
         return _livroMapper.toDTO(l);
     }
 
+    @Override
     public List<LivroDTO> getAll() {
         return _livroRepository.findAll().stream().map(_livroMapper::toDTO).collect(Collectors.toList());
     }
 
+    @Override
     public LivroDTO updateLivro(LivroDTO livroDTO) throws LivroNotFoundException {
         LivroDTO l = this.findById(livroDTO.getLivroId());
         l.setAutor(StringUtils.isEmpty(livroDTO.getAutor()) ? l.getAutor() : livroDTO.getAutor());
@@ -71,6 +80,7 @@ public class LivroService {
         return l;
     }
 
+    @Override
     public Long removeById(Long id) throws LivroNotFoundException {
         LivroDTO l = this.findById(id);
         Livro livroToRemove = _livroMapper.toModel(l);
@@ -78,17 +88,20 @@ public class LivroService {
         return l.getLivroId();
     }
 
-    private void setLivroQuantidadeById(Long livroId, Integer quantidade){
+    @Override
+    public void setLivroQuantidadeById(Long livroId, Integer quantidade){
         LivroDTO l = this.findById(livroId);
         this.verifyIfLivroIsAvailable(livroId);
         l.setQuantidadeDisponivel(quantidade);
         _livroRepository.save(_livroMapper.toModel(l));
     }
 
+    @Override
     public void decrementarQuantidade(Long livroId, Integer quantidade) {
         this.setLivroQuantidadeById(livroId, quantidade - 1);
     }
 
+    @Override
     public void incrementarQuantidade(Long livroId, Integer quantidade) {
         this.setLivroQuantidadeById(livroId, quantidade + 1);
     }

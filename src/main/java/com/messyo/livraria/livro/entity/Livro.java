@@ -2,15 +2,10 @@ package com.messyo.livraria.livro.entity;
 
 import com.messyo.livraria.editora.entity.Editora;
 import com.messyo.livraria.entity.Auditable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(
@@ -40,7 +35,7 @@ public class Livro extends Auditable {
     private String nomeLivro;
 
     @Column(name = "lancamento", nullable = false)
-    private LocalDateTime lancamento;
+    private Date lancamento;
 
     @Column(name = "quantidade_disponivel", nullable = false)
     private Integer quantidadeDisponivel;

@@ -43,7 +43,7 @@ public class EditoraService implements IEditoraService {
     }
 
     @Override
-    public EditoraDTO findById(Long id) {
+    public EditoraDTO findById(Long id) throws EditoraNotFoundException {
         Editora e = _editoraRepository.findById(id).orElseThrow(() -> new EditoraNotFoundException(id));
 
         return _editoraMapper.toDTO(e);

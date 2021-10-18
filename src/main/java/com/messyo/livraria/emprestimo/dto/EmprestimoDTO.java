@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -26,9 +27,9 @@ public class EmprestimoDTO {
     private LivroDTO livroEmprestimo;
 
     @NotNull(message = "O campo Previsão de Devolução é obrigatório")
-    private LocalDateTime previsaoDevolucao;
+    private Date previsaoDevolucao;
 
-    private LocalDateTime dataDevolucao;
+    private Date dataDevolucao;
 
     @NotBlank(message = "O campo Status do Empréstimo é obrigatório")
     @Size(max = 30)
