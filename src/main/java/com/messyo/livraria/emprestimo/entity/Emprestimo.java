@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -38,10 +39,10 @@ public class Emprestimo extends Auditable {
     private Livro livroEmprestimo;
 
     @Column(name = "previsao_devolucao", nullable = false)
-    private Date previsaoDevolucao;
+    private LocalDate previsaoDevolucao;
 
     @Column(name = "data_devolucao")
-    private Date dataDevolucao;
+    private LocalDate dataDevolucao;
 
     @Column(name = "status_emprestimo", nullable = false, columnDefinition = "TEXT")
     private String statusEmprestimo;

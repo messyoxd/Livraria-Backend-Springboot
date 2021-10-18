@@ -1,5 +1,6 @@
 package com.messyo.livraria.livro.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.messyo.livraria.editora.dto.EditoraDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -31,7 +33,8 @@ public class LivroDTO {
     private String nomeLivro;
 
     @NotNull(message = "O campo Lançamento é obrigatório")
-    private Date lancamento;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/YYYY")
+    private LocalDate lancamento;
 
     @NotNull(message = "O campo Quantidade Disponível é obrigatório")
     private Integer quantidadeDisponivel;
