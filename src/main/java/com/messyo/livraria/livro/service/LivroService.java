@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,29 +30,29 @@ public class LivroService implements ILivroService {
 
     @Override
     public LivroDTO create(LivroDTO livroDTO) {
-        verifyIfExistsByName(livroDTO.getLivroId());
+        verifyIfExistsByName(livroDTO.getNomeLivro());
         Livro livroToSave = _livroMapper.toModel(livroDTO);
         Livro savedLivro = _livroRepository.save(livroToSave);
         return _livroMapper.toDTO(savedLivro);
     }
 
     @Override
-    public void verifyIfExistsByName(Long id) {
-        _livroRepository.findById(id)
+    public void verifyIfExistsByName(String nome) {
+        _livroRepository.findByNomeLivro(nome)
                 .ifPresent(livro -> {
                     throw new LivroAlreadyExistsException((livro.getNomeLivro()));
                 });
     }
 
     @Override
-    public void verifyIfLivroIsAvailable(Long id) {
-        _livroRepository.findById(id)
-                .ifPresent(livro -> {
+    public Integer verifyIfLivroIsAvailable(Long id) {
+        Optional<Livro> l = _livroRepository.findById(id);
+        l.ifPresent(livro -> {
                     if(livro.getQuantidadeDisponivel() == 0){
                         throw new EmprestimoLivroNotAvailableException(livro.getLivroId());
                     }
                 });
-
+        return l.get().getQuantidadeDisponivel();
     }
 
     @Override

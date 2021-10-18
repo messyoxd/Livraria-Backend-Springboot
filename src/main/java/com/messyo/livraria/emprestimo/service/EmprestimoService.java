@@ -16,7 +16,9 @@ import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,10 +49,10 @@ public class EmprestimoService implements IEmprestimoService {
     @Override
     public EmprestimoDTO create(EmprestimoDTO emprestimoDTO) {
 //        verifyIfExists(emprestimoDTO.getEmprestimoId());
-        _livroService.verifyIfLivroIsAvailable(emprestimoDTO.getLivroEmprestimo().getLivroId());
+        int quantidade = _livroService.verifyIfLivroIsAvailable(emprestimoDTO.getLivroEmprestimo().getLivroId());
         Emprestimo emprestimoToSave = _emprestimoMapper.toModel(emprestimoDTO);
         Emprestimo savedEmprestimo = _emprestimoRepository.save(emprestimoToSave);
-        _livroService.decrementarQuantidade(emprestimoDTO.getLivroEmprestimo().getLivroId(), emprestimoDTO.getLivroEmprestimo().getQuantidadeDisponivel());
+        _livroService.decrementarQuantidade(emprestimoDTO.getLivroEmprestimo().getLivroId(), quantidade);
         return _emprestimoMapper.toDTO(savedEmprestimo);
     }
 
@@ -125,10 +127,18 @@ public class EmprestimoService implements IEmprestimoService {
         return e;
     }
 
+//
+    private LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {
+        return new java.sql.Timestamp(
+                dateToConvert.getTime()).toLocalDateTime();
+    }
+
     @Override
     public Long devolucaoDeLivro(EmprestimoDTO emprestimo) {
         verifyIfDoesNotExists(emprestimo.getEmprestimoId());
-        if (emprestimo.getDataDevolucao().plusDays(1).isAfter(emprestimo.getPrevisaoDevolucao())) {
+        LocalDateTime dataDevolucao = convertToLocalDateTimeViaSqlTimestamp(emprestimo.getDataDevolucao());
+        LocalDateTime previsaoDevolucao = convertToLocalDateTimeViaSqlTimestamp(emprestimo.getPrevisaoDevolucao());
+        if (dataDevolucao.plusDays(1).isAfter(previsaoDevolucao)) {
             emprestimo.setStatusEmprestimo("Devolvido com atraso");
         } else {
             emprestimo.setStatusEmprestimo("Devolvido");

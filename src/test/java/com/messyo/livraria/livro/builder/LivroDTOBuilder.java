@@ -6,6 +6,7 @@ import com.messyo.livraria.livro.dto.LivroDTO;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Builder
 public class LivroDTOBuilder {
@@ -17,7 +18,7 @@ public class LivroDTOBuilder {
 
     private final String nomeLivro = "Livrinho";
 
-    private final LocalDateTime lancamento = LocalDateTime.now();
+    private final Date lancamento = new Date();
 
     private final Integer quantidadeDisponivel = 5;
 

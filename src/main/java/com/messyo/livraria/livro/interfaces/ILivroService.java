@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface ILivroService {
     LivroDTO create(LivroDTO livroDTO);
-    void verifyIfExistsByName(Long id);
-    void verifyIfLivroIsAvailable(Long id);
+    void verifyIfExistsByName(String nome);
+    Integer verifyIfLivroIsAvailable(Long id);
     LivroDTO findById(Long id);
     List<LivroDTO> getAll();
     LivroDTO updateLivro(LivroDTO livroDTO);
