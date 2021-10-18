@@ -1,5 +1,6 @@
 package com.messyo.livraria.usuario.controller;
 
+import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +18,7 @@ public interface UsuarioControllerDocs {
             @ApiResponse(code = 201, message = "Success usuario creation"),
             @ApiResponse(code = 400, message = "Missing requered fields, wrong field range value or usuario already registered")
     })
-    UsuarioDTO create(UsuarioDTO usuarioDTO);
+    MessageDTO create(UsuarioDTO usuarioDTO);
 
     @ApiOperation(value = "Recuperar usuario por id")
     @ApiResponses(value = {

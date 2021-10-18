@@ -136,9 +136,9 @@ public class EmprestimoService implements IEmprestimoService {
     @Override
     public Long devolucaoDeLivro(EmprestimoDTO emprestimo) {
         verifyIfDoesNotExists(emprestimo.getEmprestimoId());
-        LocalDateTime dataDevolucao = convertToLocalDateTimeViaSqlTimestamp(emprestimo.getDataDevolucao());
-        LocalDateTime previsaoDevolucao = convertToLocalDateTimeViaSqlTimestamp(emprestimo.getPrevisaoDevolucao());
-        if (dataDevolucao.plusDays(1).isAfter(previsaoDevolucao)) {
+//        LocalDateTime dataDevolucao = convertToLocalDateTimeViaSqlTimestamp(emprestimo.getDataDevolucao());
+//        LocalDateTime previsaoDevolucao = convertToLocalDateTimeViaSqlTimestamp(emprestimo.getPrevisaoDevolucao());
+        if (emprestimo.getDataDevolucao().plusDays(1).isAfter(emprestimo.getPrevisaoDevolucao())) {
             emprestimo.setStatusEmprestimo("Devolvido com atraso");
         } else {
             emprestimo.setStatusEmprestimo("Devolvido");
