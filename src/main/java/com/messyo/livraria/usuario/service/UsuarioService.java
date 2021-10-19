@@ -4,6 +4,7 @@ import com.messyo.livraria.livro.exception.UsuarioNotFoundException;
 import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import com.messyo.livraria.usuario.entity.Usuario;
+import com.messyo.livraria.usuario.interfaces.IPasswordEncoderConfig;
 import com.messyo.livraria.usuario.interfaces.IUsuarioService;
 import com.messyo.livraria.usuario.mapper.UsuarioMapper;
 import com.messyo.livraria.usuario.repository.UsuarioRepository;
@@ -19,6 +20,9 @@ public class UsuarioService implements IUsuarioService {
     private final UsuarioRepository _usuarioRepository;
 
     @Autowired
+    protected IPasswordEncoderConfig _passwordEncoderConfig;
+
+    @Autowired
     protected UsuarioMapper _usuarioMapper;
 
     @Autowired
@@ -31,6 +35,9 @@ public class UsuarioService implements IUsuarioService {
     public MessageDTO create(UsuarioDTO usuarioDTO) {
 //        verifyIfExistsByEmail(usuarioDTO.getEmail());
         Usuario usuarioToSave = _usuarioMapper.toModel(usuarioDTO);
+
+//        TODO: criar campos de email e password
+
         Usuario savedUsuario = _usuarioRepository.save(usuarioToSave);
         return MessageDTO.builder()
                 .message(String.format("User %s with ID %d was successfully created", savedUsuario.getNomeCompleto(), savedUsuario.getUsuarioId()))
