@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,6 +32,13 @@ public class UsuarioDTO {
     @NotBlank(message = "O campo Cidade é obrigatório")
     @Size(max = 100)
     private String cidade;
+
+    @Email
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @NotNull
