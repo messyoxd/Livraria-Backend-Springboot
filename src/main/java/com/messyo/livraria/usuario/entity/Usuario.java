@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 
 @Entity
@@ -29,6 +30,13 @@ public class Usuario extends Auditable {
 
     @Column(name = "cidade", nullable = false, columnDefinition = "TEXT")
     private String cidade;
+
+    @Column(nullable = false, length = 100, unique = true)
+    @Email
+    private String email;
+
+    @Column(nullable = false, length = 50)
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

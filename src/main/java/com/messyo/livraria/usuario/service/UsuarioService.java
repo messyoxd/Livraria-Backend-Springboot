@@ -1,15 +1,16 @@
 package com.messyo.livraria.usuario.service;
 
+import com.messyo.livraria.livro.exception.UsuarioAlreadyExistsException;
 import com.messyo.livraria.livro.exception.UsuarioNotFoundException;
 import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import com.messyo.livraria.usuario.entity.Usuario;
-import com.messyo.livraria.usuario.interfaces.IPasswordEncoderConfig;
 import com.messyo.livraria.usuario.interfaces.IUsuarioService;
 import com.messyo.livraria.usuario.mapper.UsuarioMapper;
 import com.messyo.livraria.usuario.repository.UsuarioRepository;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,24 +20,24 @@ import java.util.stream.Collectors;
 public class UsuarioService implements IUsuarioService {
     private final UsuarioRepository _usuarioRepository;
 
-    @Autowired
-    protected IPasswordEncoderConfig _passwordEncoderConfig;
+    protected PasswordEncoder _passwordEncoder;
 
     @Autowired
     protected UsuarioMapper _usuarioMapper;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         _usuarioRepository = usuarioRepository;
+        _passwordEncoder = passwordEncoder;
     }
 
 
     @Override
     public MessageDTO create(UsuarioDTO usuarioDTO) {
-//        verifyIfExistsByEmail(usuarioDTO.getEmail());
+        verifyIfExistsByEmail(usuarioDTO.getEmail());
         Usuario usuarioToSave = _usuarioMapper.toModel(usuarioDTO);
 
-//        TODO: criar campos de email e password
+        usuarioToSave.setPassword(_passwordEncoder.encode(usuarioToSave.getPassword()));
 
         Usuario savedUsuario = _usuarioRepository.save(usuarioToSave);
         return MessageDTO.builder()
@@ -44,12 +45,12 @@ public class UsuarioService implements IUsuarioService {
                 .build();
     }
 
-//    private void verifyIfExists(Long id) {
-//        _usuarioRepository.findById(id)
-//                .ifPresent(usuario -> {
-//                    throw new UsuarioAlreadyExistsException((usuario.getUsuarioId()));
-//                });
-//    }
+    private void verifyIfExistsByEmail(String email) {
+        _usuarioRepository.findByEmail(email)
+                .ifPresent(usuario -> {
+                    throw new UsuarioAlreadyExistsException(email);
+                });
+    }
 
     @Override
     public UsuarioDTO findById(Long id) throws UsuarioNotFoundException {

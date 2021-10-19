@@ -14,9 +14,13 @@ public class UsuarioDTOBuilder {
 
     private final String cidade = "Cidade de Townsvile";
 
+    private final String email = "teste@email.com";
+
+    private final String password = "qwe123";
+
     private final Role role = Role.USER;
 
     public UsuarioDTO buildUsuarioDTO() {
-        return new UsuarioDTO(usuarioId, nomeCompleto, endereco, cidade, role);
+        return new UsuarioDTO(usuarioId, nomeCompleto, endereco, cidade, email, password, role);
     }
 }
