@@ -1,6 +1,7 @@
 package com.messyo.livraria.usuario.entity;
 
 import com.messyo.livraria.entity.Auditable;
+import com.messyo.livraria.usuario.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,5 +29,9 @@ public class Usuario extends Auditable {
 
     @Column(name = "cidade", nullable = false, columnDefinition = "TEXT")
     private String cidade;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Role role;
 
 }
