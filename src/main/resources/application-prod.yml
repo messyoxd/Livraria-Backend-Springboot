@@ -18,3 +18,7 @@ logging:
     br:
       com:
         messyo: INFO
+
+jwt:
+  secret: livraria
+  validity: 18000
