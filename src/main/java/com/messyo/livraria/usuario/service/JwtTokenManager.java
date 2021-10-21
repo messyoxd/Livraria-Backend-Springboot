@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Component
 public class JwtTokenManager {
 
-    private Long jwtTokenValidity;
+    private final Long jwtTokenValidity;
     private final String secret;
 
     public JwtTokenManager(@Value("${jwt.validity}") Long jwtTokenValidity,
@@ -24,7 +24,7 @@ public class JwtTokenManager {
         this.secret = secret;
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return goGenerateToken(userDetails.getUsername(), claims);
     }
@@ -37,11 +37,11 @@ public class JwtTokenManager {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public String getUserEmailFromToken(String token){
+    public String getUserEmailFromToken(String token) {
         return getClaimForToken(token, Claims::getSubject);
     }
 
-    public Date getGetExpirationDateFromToken(String token){
+    public Date getGetExpirationDateFromToken(String token) {
         return getClaimForToken(token, Claims::getExpiration);
     }
 
@@ -57,7 +57,7 @@ public class JwtTokenManager {
                 .getBody();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails){
+    public boolean validateToken(String token, UserDetails userDetails) {
         String email = getUserEmailFromToken(token);
         return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

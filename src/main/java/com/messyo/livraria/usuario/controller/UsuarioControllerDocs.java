@@ -1,12 +1,16 @@
 package com.messyo.livraria.usuario.controller;
 
+import com.messyo.livraria.usuario.dto.JwtRequest;
+import com.messyo.livraria.usuario.dto.JwtResponse;
 import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api("Usuarios management")
@@ -46,4 +50,11 @@ public interface UsuarioControllerDocs {
             @ApiResponse(code = 404, message = "usuario not found")
     })
     UsuarioDTO update(UsuarioDTO usuarioDTO);
+
+    @ApiOperation(value = "Autenticar usuario")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success usuario authenticated"),
+            @ApiResponse(code = 404, message = "usuario not found")
+    })
+    JwtResponse createAuthenticationToken(@RequestBody @Valid JwtRequest jwtRequest);
 }

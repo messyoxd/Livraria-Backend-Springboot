@@ -15,7 +15,7 @@ public class AuthenticatedUser implements UserDetails {
     private static final String ROLE_PREFIX = "ROLE_";
 
     private String password;
-    private String email; //username
+    private String username;
     private String role;
 
     @Override
@@ -30,7 +30,7 @@ public class AuthenticatedUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

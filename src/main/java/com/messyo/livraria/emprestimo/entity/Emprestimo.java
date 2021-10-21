@@ -24,7 +24,7 @@ public class Emprestimo extends Auditable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emprestimo_sequence")
     private Long emprestimoId;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(
             name = "usuario_id",
             referencedColumnName = "usuarioId"
@@ -35,7 +35,7 @@ public class Emprestimo extends Auditable {
             name = "livro_id",
             referencedColumnName = "livroId"
     )
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private Livro livroEmprestimo;
 
     @Column(name = "previsao_devolucao", nullable = false)

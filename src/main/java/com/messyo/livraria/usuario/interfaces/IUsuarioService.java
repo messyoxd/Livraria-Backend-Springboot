@@ -6,7 +6,7 @@ import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import java.util.List;
 
 public interface IUsuarioService {
-    MessageDTO create(UsuarioDTO usuarioDTO);
+//    MessageDTO create(UsuarioDTO usuarioDTO);
     UsuarioDTO findById(Long id);
     List<UsuarioDTO> getAllUsuarios();
     UsuarioDTO updateUsuario(UsuarioDTO usuarioDTO);
