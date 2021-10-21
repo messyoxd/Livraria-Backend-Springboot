@@ -23,7 +23,6 @@ public class UsuarioController implements UsuarioControllerDocs {
 
     private final AuthenticationService authenticationService;
 
-    //    @ApiOperation(value="Criar Usuario", authorizations = {@Authorization(value = "jwtToken")})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MessageDTO create(@RequestBody @Valid UsuarioDTO usuarioDTO) {
