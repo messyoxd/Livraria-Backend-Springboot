@@ -1,56 +1,48 @@
 package com.messyo.livraria.usuario.service;
 
-import com.messyo.livraria.livro.exception.UsuarioAlreadyExistsException;
 import com.messyo.livraria.livro.exception.UsuarioNotFoundException;
-import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import com.messyo.livraria.usuario.entity.Usuario;
 import com.messyo.livraria.usuario.interfaces.IUsuarioService;
 import com.messyo.livraria.usuario.mapper.UsuarioMapper;
 import com.messyo.livraria.usuario.repository.UsuarioRepository;
 import io.micrometer.core.instrument.util.StringUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UsuarioService implements IUsuarioService {
     private final UsuarioRepository _usuarioRepository;
 
-    protected PasswordEncoder _passwordEncoder;
+//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     protected UsuarioMapper _usuarioMapper;
 
-    @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
-        _usuarioRepository = usuarioRepository;
-        _passwordEncoder = passwordEncoder;
-    }
+//    @Override
+//    public MessageDTO create(UsuarioDTO usuarioDTO) {
+//        verifyIfExistsByEmail(usuarioDTO.getEmail());
+//        Usuario usuarioToSave = _usuarioMapper.toModel(usuarioDTO);
+//
+//        usuarioToSave.setPassword(bCryptPasswordEncoder.encode(usuarioToSave.getPassword()));
+//
+//        Usuario savedUsuario = _usuarioRepository.save(usuarioToSave);
+//        return MessageDTO.builder()
+//                .message(String.format("User %s with ID %d was successfully created", savedUsuario.getNomeCompleto(), savedUsuario.getUsuarioId()))
+//                .build();
+//    }
 
-
-    @Override
-    public MessageDTO create(UsuarioDTO usuarioDTO) {
-        verifyIfExistsByEmail(usuarioDTO.getEmail());
-        Usuario usuarioToSave = _usuarioMapper.toModel(usuarioDTO);
-
-        usuarioToSave.setPassword(_passwordEncoder.encode(usuarioToSave.getPassword()));
-
-        Usuario savedUsuario = _usuarioRepository.save(usuarioToSave);
-        return MessageDTO.builder()
-                .message(String.format("User %s with ID %d was successfully created", savedUsuario.getNomeCompleto(), savedUsuario.getUsuarioId()))
-                .build();
-    }
-
-    private void verifyIfExistsByEmail(String email) {
-        _usuarioRepository.findByEmail(email)
-                .ifPresent(usuario -> {
-                    throw new UsuarioAlreadyExistsException(email);
-                });
-    }
+//    private void verifyIfExistsByEmail(String email) {
+//        _usuarioRepository.findByEmail(email)
+//                .ifPresent(usuario -> {
+//                    throw new UsuarioAlreadyExistsException(email);
+//                });
+//    }
 
     @Override
     public UsuarioDTO findById(Long id) throws UsuarioNotFoundException {

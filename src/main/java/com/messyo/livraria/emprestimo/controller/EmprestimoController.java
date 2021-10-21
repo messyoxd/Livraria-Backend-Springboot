@@ -32,12 +32,12 @@ public class EmprestimoController implements EmprestimoControllerDocs {
         return _emprestimoService.findById(id);
     }
 
-    @GetMapping("/usuario?{id}")
+    @GetMapping("/usuario/{id}")
     public List<EmprestimoDTO> findByUsuarioId(@PathVariable Long id) {
         return _emprestimoService.findByUsuarioId(id);
     }
 
-    @GetMapping("/livro?{id}")
+    @GetMapping("/livro/{id}")
     public List<EmprestimoDTO> findByLivroId(@PathVariable Long id) {
         return _emprestimoService.findByLivroId(id);
     }

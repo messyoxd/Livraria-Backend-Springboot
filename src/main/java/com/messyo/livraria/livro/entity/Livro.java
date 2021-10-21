@@ -20,8 +20,7 @@ public class Livro extends Auditable {
     private Long livroId;
 
     @ManyToOne(
-            optional = false,
-            fetch = FetchType.LAZY
+            optional = false
     )
     @JoinColumn(
             name = "editora_id",

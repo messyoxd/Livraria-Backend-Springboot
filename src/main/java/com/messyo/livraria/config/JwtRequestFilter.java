@@ -2,9 +2,9 @@ package com.messyo.livraria.config;
 
 import com.messyo.livraria.usuario.service.AuthenticationService;
 import com.messyo.livraria.usuario.service.JwtTokenManager;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -20,6 +20,7 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
+    public static final String BEARER_PREFIX = "Bearer ";
     @Autowired
     private AuthenticationService authenticationService;
 
@@ -28,29 +29,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var email = "";
-        var jwtToken = "";
 
-        var requestTokenHeader = request.getHeader("Authorization");
-        if (isTokenPresent(requestTokenHeader)) {
-            jwtToken = requestTokenHeader.substring(7);
-            email = jwtTokenManager.getUserEmailFromToken(jwtToken);
-        } else {
-            logger.warn("JWT does not begin with Bearer String");
+        if(request.getServletPath().equals("/api/v1/usuarios/authenticate")){
+            filterChain.doFilter(request, response);
+        }else{
+            String email = "";
+            String jwtToken = "";
+
+            String requestTokenHeader = request.getHeader("Authorization");
+            if (isTokenPresent(requestTokenHeader)) {
+                jwtToken = requestTokenHeader.substring(BEARER_PREFIX.length());
+                email = jwtTokenManager.getUserEmailFromToken(jwtToken);
+                if (isUsernameInContext(email)) {
+                    addEmailInContext(request, email, jwtToken);
+                }
+                filterChain.doFilter(request, response);
+            } else {
+//            logger.warn("JWT does not begin with Bearer String");
+                filterChain.doFilter(request, response);
+            }
         }
-
-        if (isUsernameInContext(email)) {
-            addEmailInContext(request, email, jwtToken);
-        }
-        filterChain.doFilter(request, response);
-    }
-
-    private boolean isTokenPresent(String requestTokenHeader) {
-        return requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ");
-    }
-
-    private boolean isUsernameInContext(String email) {
-        return email != null && SecurityContextHolder.getContext().getAuthentication() == null;
     }
 
     private void addEmailInContext(HttpServletRequest request, String email, String jwtToken) {
@@ -61,5 +59,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+    }
+
+    private boolean isTokenPresent(String requestTokenHeader) {
+        return requestTokenHeader != null && requestTokenHeader.startsWith(BEARER_PREFIX);
+    }
+
+    private boolean isUsernameInContext(String email) {
+        return email != null && SecurityContextHolder.getContext().getAuthentication() == null;
     }
 }
