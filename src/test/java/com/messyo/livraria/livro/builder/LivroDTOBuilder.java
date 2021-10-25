@@ -23,7 +23,11 @@ public class LivroDTOBuilder {
 
     private final Integer quantidadeDisponivel = 5;
 
+    private final String createdAt = LocalDateTime.now().toString();
+
+    private final String updatedAt = LocalDateTime.now().toString();
+
     public LivroDTO buildLivroDTO() {
-        return new LivroDTO(livroId, editora, autor, nomeLivro, lancamento, quantidadeDisponivel);
+        return new LivroDTO(livroId, editora, autor, nomeLivro, lancamento, quantidadeDisponivel, createdAt, updatedAt);
     }
 }

@@ -2,6 +2,7 @@ package com.messyo.livraria.editora.controller;
 
 import com.messyo.livraria.editora.dto.EditoraDTO;
 import com.messyo.livraria.editora.interfaces.IEditoraService;
+import com.messyo.livraria.editora.viewmodel.EditoraViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +34,13 @@ public class EditoraController implements EditoraControllerDocs {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Long removeById(@PathVariable Long id) {
         return _editoraService.removeById(id);
     }
 
     @PutMapping
-    public EditoraDTO update(@RequestBody @Valid EditoraDTO editoraDTO) {
-        return _editoraService.updateEditora(editoraDTO);
+    public EditoraDTO update(@RequestBody @Valid EditoraViewModel vm) {
+        return _editoraService.updateEditora(vm);
     }
 }

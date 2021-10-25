@@ -3,6 +3,7 @@ package com.messyo.livraria.emprestimo.controller;
 import com.messyo.livraria.emprestimo.dto.EmprestimoDTO;
 import com.messyo.livraria.emprestimo.interfaces.IEmprestimoService;
 import com.messyo.livraria.emprestimo.service.EmprestimoService;
+import com.messyo.livraria.emprestimo.viewmodel.EmprestimoViewmodel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -53,13 +54,13 @@ public class EmprestimoController implements EmprestimoControllerDocs {
     }
 
     @PutMapping
-    public EmprestimoDTO update(@RequestBody @Valid EmprestimoDTO emprestimoDTO) {
-        return _emprestimoService.updateEmprestimo(emprestimoDTO);
+    public EmprestimoDTO update(@RequestBody @Valid EmprestimoViewmodel vm) {
+        return _emprestimoService.updateEmprestimo(vm);
     }
 
-    @PostMapping("/devolucao")
+    @PostMapping("/devolucao/{emprestimoId}")
     @ResponseStatus(HttpStatus.OK)
-    public Long devolucao(@RequestBody @Valid EmprestimoDTO emprestimoDTO) {
-        return _emprestimoService.devolucaoDeLivro(emprestimoDTO);
+    public Long devolucao(@PathVariable Long emprestimoId) {
+        return _emprestimoService.devolucaoDeLivro(emprestimoId);
     }
 }

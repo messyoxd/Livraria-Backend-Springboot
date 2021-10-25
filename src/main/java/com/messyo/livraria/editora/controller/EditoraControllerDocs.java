@@ -1,6 +1,7 @@
 package com.messyo.livraria.editora.controller;
 
 import com.messyo.livraria.editora.dto.EditoraDTO;
+import com.messyo.livraria.editora.viewmodel.EditoraViewModel;
 import io.swagger.annotations.*;
 
 import java.util.List;
@@ -40,6 +41,6 @@ public interface EditoraControllerDocs {
             @ApiResponse(code = 204, message = "Success editora edited"),
             @ApiResponse(code = 404, message = "Editora not found")
     })
-    EditoraDTO update(EditoraDTO editoraDTO);
+    EditoraDTO update(EditoraViewModel vm);
 
 }

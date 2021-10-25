@@ -1,7 +1,9 @@
 package com.messyo.livraria.emprestimo.controller;
 
 import com.messyo.livraria.emprestimo.dto.EmprestimoDTO;
+import com.messyo.livraria.emprestimo.viewmodel.EmprestimoViewmodel;
 import io.swagger.annotations.*;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
@@ -62,13 +64,13 @@ public interface EmprestimoControllerDocs {
             @ApiResponse(code = 204, message = "Success emprestimo edited"),
             @ApiResponse(code = 404, message = "emprestimo not found")
     })
-    EmprestimoDTO update(EmprestimoDTO emprestimoDTO);
+    EmprestimoDTO update(EmprestimoViewmodel vm);
 
     @ApiOperation(value = "Devolver livro", authorizations = {@Authorization(value = "jwtToken")})
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Success emprestimo edited"),
             @ApiResponse(code = 404, message = "emprestimo not found")
     })
-    Long devolucao(EmprestimoDTO emprestimoDTO);
+    Long devolucao(Long emprestimoId);
 
 }

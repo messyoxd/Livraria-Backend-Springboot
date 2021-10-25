@@ -1,5 +1,8 @@
 package com.messyo.livraria.livro.service;
 
+import com.messyo.livraria.editora.exception.EditoraNotFoundException;
+import com.messyo.livraria.editora.mapper.EditoraMapper;
+import com.messyo.livraria.editora.repository.EditoraRepository;
 import com.messyo.livraria.emprestimo.exception.EmprestimoLivroNotAvailableException;
 import com.messyo.livraria.livro.dto.LivroDTO;
 import com.messyo.livraria.livro.entity.Livro;
@@ -8,6 +11,7 @@ import com.messyo.livraria.livro.exception.LivroNotFoundException;
 import com.messyo.livraria.livro.interfaces.ILivroService;
 import com.messyo.livraria.livro.mapper.LivroMapper;
 import com.messyo.livraria.livro.repository.LivroRepository;
+import com.messyo.livraria.livro.viewmodel.LivroViewModel;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,22 +22,32 @@ import java.util.stream.Collectors;
 
 @Service
 public class LivroService implements ILivroService {
+
+    @Autowired
     private LivroRepository _livroRepository;
+
+    @Autowired
+    private EditoraRepository _editoraRepository;
 
     @Autowired
     protected LivroMapper _livroMapper;
 
     @Autowired
-    public LivroService(LivroRepository livroRepository) {
-        _livroRepository = livroRepository;
-    }
+    protected EditoraMapper _editoraMapper;
 
     @Override
     public LivroDTO create(LivroDTO livroDTO) {
         verifyIfExistsByName(livroDTO.getNomeLivro());
+        verifyIfEditoraExists(livroDTO.getEditora().getEditoraId());
         Livro livroToSave = _livroMapper.toModel(livroDTO);
         Livro savedLivro = _livroRepository.save(livroToSave);
         return _livroMapper.toDTO(savedLivro);
+    }
+
+    @Override
+    public void verifyIfEditoraExists(Long editoraId) {
+        _editoraRepository.findById(editoraId)
+                .orElseThrow(() -> new EditoraNotFoundException(editoraId));
     }
 
     @Override
@@ -57,9 +71,13 @@ public class LivroService implements ILivroService {
 
     @Override
     public LivroDTO findById(Long id) throws LivroNotFoundException {
-        Livro l = _livroRepository.findById(id).orElseThrow(() -> new LivroNotFoundException(id));
+        Livro l = getLivro(id);
 
         return _livroMapper.toDTO(l);
+    }
+
+    private Livro getLivro(Long id) {
+        return _livroRepository.findById(id).orElseThrow(() -> new LivroNotFoundException(id));
     }
 
     @Override
@@ -68,16 +86,16 @@ public class LivroService implements ILivroService {
     }
 
     @Override
-    public LivroDTO updateLivro(LivroDTO livroDTO) throws LivroNotFoundException {
-        LivroDTO l = this.findById(livroDTO.getLivroId());
-        l.setAutor(StringUtils.isEmpty(livroDTO.getAutor()) ? l.getAutor() : livroDTO.getAutor());
-        l.setEditora(livroDTO.getEditora() == null ? l.getEditora() : livroDTO.getEditora());
-        l.setLancamento(livroDTO.getLancamento() == null ? l.getLancamento() : livroDTO.getLancamento());
-        l.setNomeLivro(StringUtils.isEmpty(livroDTO.getNomeLivro()) ? l.getNomeLivro() : livroDTO.getNomeLivro());
-        l.setQuantidadeDisponivel(livroDTO.getQuantidadeDisponivel() == null ? l.getQuantidadeDisponivel() : livroDTO.getQuantidadeDisponivel());
+    public LivroDTO updateLivro(LivroViewModel vm) throws LivroNotFoundException {
+        LivroDTO l = _livroMapper.toDTO(this.getLivro(vm.getLivroId()));
+        l.setAutor(StringUtils.isEmpty(vm.getAutor()) ? l.getAutor() : vm.getAutor());
+        l.setEditora(vm.getEditora() == null ? l.getEditora() : _editoraMapper.vmToDTO(vm.getEditora()));
+        l.setLancamento(vm.getLancamento() == null ? l.getLancamento() : vm.getLancamento());
+        l.setNomeLivro(StringUtils.isEmpty(vm.getNomeLivro()) ? l.getNomeLivro() : vm.getNomeLivro());
+        l.setQuantidadeDisponivel(vm.getQuantidadeDisponivel() == null ? l.getQuantidadeDisponivel() : vm.getQuantidadeDisponivel());
         Livro livroToUpdate = _livroMapper.toModel(l);
-        _livroRepository.save(livroToUpdate);
-        return l;
+        Livro savedLivro = _livroRepository.save(livroToUpdate);
+        return _livroMapper.toDTO(savedLivro);
     }
 
     @Override

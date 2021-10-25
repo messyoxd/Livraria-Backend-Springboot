@@ -1,44 +1,34 @@
-package com.messyo.livraria.emprestimo.dto;
+package com.messyo.livraria.emprestimo.viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.messyo.livraria.livro.dto.LivroDTO;
 import com.messyo.livraria.livro.viewmodel.LivroViewModel;
-import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import com.messyo.livraria.usuario.viewmodel.UsuarioViewModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmprestimoDTO {
+public class EmprestimoViewmodel {
+    @NotNull
     private Long emprestimoId;
 
-    @NotNull
     private UsuarioViewModel usuarioEmprestimo;
 
-    @NotNull
     private LivroViewModel livroEmprestimo;
 
-    @NotNull(message = "O campo Previsão de Devolução é obrigatório")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate previsaoDevolucao;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataDevolucao;
 
-    @NotBlank(message = "O campo Status do Empréstimo é obrigatório")
-    @Size(max = 30)
     private String statusEmprestimo;
 
     private String createdAt;

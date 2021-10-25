@@ -1,27 +1,23 @@
-package com.messyo.livraria.editora.dto;
+package com.messyo.livraria.editora.viewmodel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditoraDTO {
+public class EditoraViewModel {
 
+    @NotNull
     private Long editoraId;
 
-    @NotBlank(message = "O campo Nome é obrigatório")
-    @Size(max = 255)
     private String nome;
 
-    @NotBlank(message = "O campo Cidade é obrigatório")
-    @Size(max = 255)
     private String cidade;
 
     private String createdAt;

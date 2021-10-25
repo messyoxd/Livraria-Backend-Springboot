@@ -12,11 +12,12 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
 
+    @Query("SELECT u FROM Usuario u WHERE u.role = 'USER'")
+    List<Usuario> findAllClients();
 
 //    Optional<User>
 /*
-    @Query("SELECT u FROM Usuario u WHERE u.appUser.appUserRole = 'USER'")
-    List<Usuario> findAllClients();
+
 
 
     List<Usuario> findByFirstName(String firstName);

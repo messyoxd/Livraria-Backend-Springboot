@@ -6,6 +6,7 @@ import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
 import com.messyo.livraria.usuario.interfaces.IUsuarioService;
 import com.messyo.livraria.usuario.service.AuthenticationService;
+import com.messyo.livraria.usuario.viewmodel.UsuarioViewModel;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,18 +36,18 @@ public class UsuarioController implements UsuarioControllerDocs {
     }
 
     @GetMapping("/{id}")
-    public UsuarioDTO findById(@PathVariable Long id) {
+    public UsuarioViewModel findById(@PathVariable Long id) {
         return _usuarioService.findById(id);
     }
 
-    //    @GetMapping("/clients")
-//    public List<UsuarioViewModel> getAllClients(){
-//        return _usuarioService.getAllClients();
+    @GetMapping("/clients")
+    public List<UsuarioViewModel> getAllClients(){
+        return _usuarioService.getAllClients();
 
-//    }
+    }
 
     @GetMapping("/")
-    public List<UsuarioDTO> getAll() {
+    public List<UsuarioViewModel> getAll() {
         return _usuarioService.getAllUsuarios();
     }
 
@@ -56,7 +57,7 @@ public class UsuarioController implements UsuarioControllerDocs {
     }
 
     @PutMapping
-    public UsuarioDTO update(@RequestBody @Valid UsuarioDTO usuarioDTO) {
-        return _usuarioService.updateUsuario(usuarioDTO);
+    public MessageDTO update(@RequestBody @Valid UsuarioViewModel usuarioVM) {
+        return _usuarioService.updateUsuario(usuarioVM);
     }
 }

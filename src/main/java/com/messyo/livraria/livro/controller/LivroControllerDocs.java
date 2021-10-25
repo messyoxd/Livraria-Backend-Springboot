@@ -1,6 +1,7 @@
 package com.messyo.livraria.livro.controller;
 
 import com.messyo.livraria.livro.dto.LivroDTO;
+import com.messyo.livraria.livro.viewmodel.LivroViewModel;
 import io.swagger.annotations.*;
 
 import java.util.List;
@@ -39,5 +40,5 @@ public interface LivroControllerDocs {
             @ApiResponse(code = 204, message = "Success livro edited"),
             @ApiResponse(code = 404, message = "Livro not found")
     })
-    LivroDTO update(LivroDTO livroDTO);
+    LivroDTO update(LivroViewModel vm);
 }
