@@ -4,6 +4,7 @@ import com.messyo.livraria.usuario.dto.JwtRequest;
 import com.messyo.livraria.usuario.dto.JwtResponse;
 import com.messyo.livraria.usuario.dto.MessageDTO;
 import com.messyo.livraria.usuario.dto.UsuarioDTO;
+import com.messyo.livraria.usuario.viewmodel.UsuarioViewModel;
 import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -25,13 +26,19 @@ public interface UsuarioControllerDocs {
             @ApiResponse(code = 200, message = "Success usuario found"),
             @ApiResponse(code = 404, message = "usuario not found")
     })
-    UsuarioDTO findById(Long id);
+    UsuarioViewModel findById(Long id);
 
     @ApiOperation(value = "Recuperar todos os usuarios", authorizations = {@Authorization(value = "jwtToken")})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success usuario found")
     })
-    List<UsuarioDTO> getAll();
+    List<UsuarioViewModel> getAll();
+
+    @ApiOperation(value = "Recuperar todos os usuarios clientes", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success usuario found")
+    })
+    List<UsuarioViewModel> getAllClients();
 
     @ApiOperation(value = "Remover usuario por id", authorizations = {@Authorization(value = "jwtToken")})
     @ApiResponses(value = {
@@ -45,7 +52,7 @@ public interface UsuarioControllerDocs {
             @ApiResponse(code = 204, message = "Success usuario edited"),
             @ApiResponse(code = 404, message = "usuario not found")
     })
-    UsuarioDTO update(UsuarioDTO usuarioDTO);
+    MessageDTO update(UsuarioViewModel usuarioVM);
 
     @ApiOperation(value = "Autenticar usuario")
     @ApiResponses(value = {

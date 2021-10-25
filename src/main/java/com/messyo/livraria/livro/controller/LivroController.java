@@ -3,6 +3,7 @@ package com.messyo.livraria.livro.controller;
 import com.messyo.livraria.livro.dto.LivroDTO;
 import com.messyo.livraria.livro.exception.LivroNotFoundException;
 import com.messyo.livraria.livro.interfaces.ILivroService;
+import com.messyo.livraria.livro.viewmodel.LivroViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class LivroController implements LivroControllerDocs {
         return _livroService.create(livroDTO);
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public List<LivroDTO> getAll() {
         return _livroService.getAll();
     }
@@ -47,7 +48,7 @@ public class LivroController implements LivroControllerDocs {
     }
 
     @PutMapping
-    public LivroDTO update(@RequestBody @Valid LivroDTO livroDTO) {
-        return _livroService.updateLivro(livroDTO);
+    public LivroDTO update(@RequestBody @Valid LivroViewModel vm) {
+        return _livroService.updateLivro(vm);
     }
 }

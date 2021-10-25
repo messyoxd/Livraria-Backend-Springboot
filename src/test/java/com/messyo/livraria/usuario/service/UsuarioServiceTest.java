@@ -15,7 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class UsuarioServiceTest {
-    private final UsuarioMapper usuarioMapper = UsuarioMapper.INSTANCE;
+
+    @Mock
+    private UsuarioMapper usuarioMapper;
 
     @Mock
     private UsuarioRepository usuarioRepository;

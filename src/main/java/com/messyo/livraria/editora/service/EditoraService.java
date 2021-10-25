@@ -7,6 +7,7 @@ import com.messyo.livraria.editora.exception.EditoraNotFoundException;
 import com.messyo.livraria.editora.interfaces.IEditoraService;
 import com.messyo.livraria.editora.mapper.EditoraMapper;
 import com.messyo.livraria.editora.repository.EditoraRepository;
+import com.messyo.livraria.editora.viewmodel.EditoraViewModel;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,9 +45,13 @@ public class EditoraService implements IEditoraService {
 
     @Override
     public EditoraDTO findById(Long id) throws EditoraNotFoundException {
-        Editora e = _editoraRepository.findById(id).orElseThrow(() -> new EditoraNotFoundException(id));
+        Editora e = getEditora(id);
 
         return _editoraMapper.toDTO(e);
+    }
+
+    private Editora getEditora(Long id) {
+        return _editoraRepository.findById(id).orElseThrow(() -> new EditoraNotFoundException(id));
     }
 
     @Override
@@ -63,13 +68,13 @@ public class EditoraService implements IEditoraService {
     }
 
     @Override
-    public EditoraDTO updateEditora(EditoraDTO editoraDTO) {
-        EditoraDTO e = this.findById(editoraDTO.getEditoraId());
-        e.setCidade(StringUtils.isEmpty(editoraDTO.getCidade()) ? e.getCidade() : editoraDTO.getCidade());
-        e.setNome(StringUtils.isEmpty(editoraDTO.getNome()) ? e.getNome() : editoraDTO.getNome());
+    public EditoraDTO updateEditora(EditoraViewModel vm) {
+        EditoraDTO e = _editoraMapper.toDTO(this.getEditora(vm.getEditoraId()));
+        e.setCidade(StringUtils.isEmpty(vm.getCidade()) ? e.getCidade() : vm.getCidade());
+        e.setNome(StringUtils.isEmpty(vm.getNome()) ? e.getNome() : vm.getNome());
         Editora editoraToUpdate = _editoraMapper.toModel(e);
-        _editoraRepository.save(editoraToUpdate);
-        return e;
+        Editora updatedEditora = _editoraRepository.save(editoraToUpdate);
+        return _editoraMapper.toDTO(updatedEditora);
     }
 
 }

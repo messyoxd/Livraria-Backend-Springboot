@@ -55,12 +55,13 @@ public class AuthenticationService implements UserDetailsService {
 
     //    @Override
     public JwtResponse createAuthenticationToken(JwtRequest jwtRequest) {
+        String email = jwtRequest.getEmail();
         authenticate(
-                jwtRequest.getEmail(),
+                email,
                 jwtRequest.getPassword()
         );
 
-        UserDetails u = this.loadUserByUsername(jwtRequest.getEmail());
+        UserDetails u = this.loadUserByUsername(email);
         String token = jwtTokenManager.generateToken(u);
 
         return JwtResponse.builder().jwtToken(token).build();
